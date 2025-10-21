@@ -3,65 +3,141 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Bangladesh GPA Calculator</title>
+  <title>SSC/HSC Grade Calculator By Dhrubo</title>
   <style>
+    @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap');
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
     body {
-      font-family: Arial, sans-serif;
-      background: linear-gradient(135deg, #56ccf2, #2f80ed);
+      font-family: 'Montserrat', sans-serif;
+      background: linear-gradient(135deg, #6a11cb, #2575fc);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 20px;
       color: #fff;
-      text-align: center;
-      padding: 50px;
     }
 
     .container {
-      background: rgba(255, 255, 255, 0.15);
-      border-radius: 20px;
-      padding: 30px;
+      background: rgba(255, 255, 255, 0.12);
+      backdrop-filter: blur(10px);
+      border-radius: 25px;
+      padding: 40px 30px;
       max-width: 400px;
-      margin: auto;
-      box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+      width: 100%;
+      text-align: center;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+      transition: transform 0.3s ease;
     }
 
-    input {
-      width: 80%;
-      padding: 10px;
-      margin: 15px 0;
-      border-radius: 8px;
+    .container:hover {
+      transform: scale(1.02);
+    }
+
+    .logo {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin-bottom: 20px;
+      border: 3px solid #fff;
+    }
+
+    h1 {
+      font-size: 26px;
+      margin-bottom: 15px;
+      font-weight: 600;
+      color: #fff;
+    }
+
+    p {
+      font-size: 16px;
+      margin-bottom: 15px;
+      color: #f0f0f0;
+    }
+
+    input[type="number"] {
+      width: 90%;
+      padding: 12px;
+      margin: 10px 0;
+      border-radius: 12px;
       border: none;
       font-size: 16px;
       text-align: center;
+      outline: none;
+      background: rgba(255,255,255,0.2);
+      color: #fff;
+      transition: background 0.3s ease;
+    }
+
+    input[type="number"]:focus {
+      background: rgba(255,255,255,0.35);
     }
 
     button {
-      background: #27ae60;
-      color: white;
+      background: linear-gradient(135deg, #ff7e5f, #feb47b);
+      color: #fff;
       border: none;
-      padding: 10px 20px;
-      border-radius: 10px;
+      padding: 12px 25px;
+      border-radius: 15px;
       font-size: 16px;
       cursor: pointer;
-      transition: background 0.3s;
+      font-weight: 600;
+      transition: transform 0.2s, box-shadow 0.2s;
+      margin-top: 10px;
     }
 
     button:hover {
-      background: #2ecc71;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 15px rgba(0,0,0,0.25);
     }
 
     .result {
-      margin-top: 20px;
+      margin-top: 25px;
       font-size: 24px;
-      font-weight: bold;
+      font-weight: 700;
+      color: #fff;
+      min-height: 30px;
+      transition: all 0.3s ease;
     }
 
     footer {
-      margin-top: 40px;
+      margin-top: 35px;
       font-size: 14px;
       color: #e0e0e0;
+    }
+
+    @media (max-width: 500px) {
+      .container {
+        padding: 30px 20px;
+      }
+
+      h1 {
+        font-size: 22px;
+      }
+
+      .result {
+        font-size: 20px;
+      }
+
+      .logo {
+        width: 100px;
+        height: 100px;
+      }
     }
   </style>
 </head>
 <body>
   <div class="container">
+    <!-- Upload your photo and replace the src below -->
+    <img src="your-photo.jpg" alt="Logo" class="logo" />
+
     <h1>SSC & HSC Grade Calculator</h1>
     <p>Enter your mark (0–100):</p>
     <input type="number" id="mark" placeholder="Enter mark here" />
@@ -70,7 +146,7 @@
     <div class="result" id="result"></div>
   </div>
 
-  <footer>© 2025 GPA Calculator BD | Made by [QAZI SAJIDUL HASAN DHRUBO]</footer>
+  <footer>© 2025 GPA Calculator BD | Made by Qazi Sajidul Hasan Dhrubo</footer>
 
   <script>
     function calculateGrade() {
