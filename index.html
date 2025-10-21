@@ -3,37 +3,37 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>SSC/HSC Grade Calculator By Dhrubo</title>
+  <title>Grade Calculator by Dhrubo</title>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap');
 
     * {
-      box-sizing: border-box;
       margin: 0;
       padding: 0;
+      box-sizing: border-box;
     }
 
     body {
       font-family: 'Montserrat', sans-serif;
-      /* Full background image */
-      background: url('dhrubo.jpg') no-repeat center center/cover;
+      background: #000;
+      color: #fff;
       display: flex;
       justify-content: center;
       align-items: center;
       min-height: 100vh;
-      padding: 20px;
-      color: #fff;
+      flex-direction: column;
+      padding: 15px;
     }
 
     .container {
-      background: rgba(0, 0, 0, 0.5); /* semi-transparent for readability */
-      backdrop-filter: blur(10px);
-      border-radius: 25px;
-      padding: 40px 30px;
-      max-width: 400px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 20px;
+      padding: 25px;
       width: 100%;
+      max-width: 380px;
       text-align: center;
-      box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+      box-shadow: 0 4px 25px rgba(255,255,255,0.1);
       transition: transform 0.3s ease;
     }
 
@@ -42,16 +42,15 @@
     }
 
     h1 {
-      font-size: 26px;
-      margin-bottom: 15px;
+      font-size: 24px;
+      margin-bottom: 12px;
       font-weight: 600;
-      color: #fff;
     }
 
     p {
-      font-size: 16px;
-      margin-bottom: 15px;
-      color: #f0f0f0;
+      font-size: 15px;
+      margin-bottom: 12px;
+      color: #ccc;
     }
 
     input[type="number"] {
@@ -59,23 +58,23 @@
       padding: 12px;
       margin: 10px 0;
       border-radius: 12px;
-      border: none;
+      border: 1px solid #444;
       font-size: 16px;
       text-align: center;
       outline: none;
-      background: rgba(255,255,255,0.2);
-      color: #1E90FF; /* input text color */
-      transition: background 0.3s ease;
+      background: #111;
+      color: #00bfff;
+      transition: all 0.3s ease;
     }
 
     input[type="number"]:focus {
-      background: rgba(255,255,255,0.35);
+      background: #222;
+      border-color: #00bfff;
     }
 
-    /* Placeholder text color */
     input[type="number"]::placeholder {
-      color: #1E90FF; /* blue */
-      opacity: 1;
+      color: #fff;
+      opacity: 0.6;
     }
 
     button {
@@ -87,8 +86,8 @@
       font-size: 16px;
       cursor: pointer;
       font-weight: 600;
-      transition: transform 0.2s, box-shadow 0.2s;
       margin-top: 10px;
+      transition: all 0.3s;
     }
 
     button:hover {
@@ -97,43 +96,100 @@
     }
 
     .result {
-      margin-top: 25px;
-      font-size: 24px;
+      margin-top: 20px;
+      font-size: 22px;
       font-weight: 700;
-      color: #fff;
       min-height: 30px;
       transition: all 0.3s ease;
     }
 
     footer {
-      margin-top: 35px;
+      margin-top: 30px;
+      text-align: center;
+      color: #aaa;
       font-size: 14px;
-      color: #e0e0e0;
+    }
+
+    /* Developer Details Popup */
+    .developer-box {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.95);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      z-index: 10;
+      text-align: center;
+      animation: fadeIn 0.4s ease;
+    }
+
+    .developer-box img {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      margin-bottom: 15px;
+      border: 2px solid #fff;
+      object-fit: cover;
+    }
+
+    .developer-box h2 {
+      font-size: 20px;
+      margin-bottom: 8px;
+    }
+
+    .developer-box p {
+      color: #ccc;
+      font-size: 15px;
+      line-height: 1.4;
+    }
+
+    .close-btn {
+      margin-top: 20px;
+      background: #ff7e5f;
+      padding: 8px 18px;
+      border-radius: 10px;
+      border: none;
+      color: white;
+      cursor: pointer;
+      font-weight: 600;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
     }
 
     @media (max-width: 500px) {
       .container {
-        padding: 30px 20px;
+        padding: 20px 15px;
       }
-
       h1 {
         font-size: 22px;
-      }
-
-      .result {
-        font-size: 20px;
       }
     }
   </style>
 </head>
 <body>
-  <div class="container">
+
+  <div class="container" id="mainContainer">
     <h1>SSC & HSC Grade Calculator</h1>
     <p>Enter your mark (0–100):</p>
     <input type="number" id="mark" placeholder="Enter mark here" />
     <br />
     <button onclick="calculateGrade()">Check Grade</button>
     <div class="result" id="result"></div>
+    <button onclick="showDeveloper()">Developer Details</button>
+  </div>
+
+  <div class="developer-box" id="developerBox">
+    <img src="dhrubo.jpg" alt="Developer Photo">
+    <h2>Qazi Sajidul Hasan Dhrubo</h2>
+    <p>Haziganj Degree College<br>Haziganj, Chandpur, Bangladesh</p>
+    <button class="close-btn" onclick="closeDeveloper()">Close</button>
   </div>
 
   <footer>© 2025 GPA Calculator BD | Made by Qazi Sajidul Hasan Dhrubo</footer>
@@ -163,6 +219,17 @@
 
       document.getElementById("result").innerHTML = result;
     }
+
+    function showDeveloper() {
+      document.getElementById("developerBox").style.display = "flex";
+      document.getElementById("mainContainer").style.display = "none";
+    }
+
+    function closeDeveloper() {
+      document.getElementById("developerBox").style.display = "none";
+      document.getElementById("mainContainer").style.display = "block";
+    }
   </script>
+
 </body>
 </html>
