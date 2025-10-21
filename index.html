@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Bangladesh GPA Calculator</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, #56ccf2, #2f80ed);
+      color: #fff;
+      text-align: center;
+      padding: 50px;
+    }
+
+    .container {
+      background: rgba(255, 255, 255, 0.15);
+      border-radius: 20px;
+      padding: 30px;
+      max-width: 400px;
+      margin: auto;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+    }
+
+    input {
+      width: 80%;
+      padding: 10px;
+      margin: 15px 0;
+      border-radius: 8px;
+      border: none;
+      font-size: 16px;
+      text-align: center;
+    }
+
+    button {
+      background: #27ae60;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 10px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    button:hover {
+      background: #2ecc71;
+    }
+
+    .result {
+      margin-top: 20px;
+      font-size: 24px;
+      font-weight: bold;
+    }
+
+    footer {
+      margin-top: 40px;
+      font-size: 14px;
+      color: #e0e0e0;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>SSC & HSC Grade Calculator</h1>
+    <p>Enter your mark (0–100):</p>
+    <input type="number" id="mark" placeholder="Enter mark here" />
+    <br />
+    <button onclick="calculateGrade()">Check Grade</button>
+    <div class="result" id="result"></div>
+  </div>
+
+  <footer>© 2025 GPA Calculator BD | Made by [QAZI SAJIDUL HASAN DHRUBO]</footer>
+
+  <script>
+    function calculateGrade() {
+      let a = parseInt(document.getElementById("mark").value);
+      let result = "";
+
+      if (isNaN(a) || a < 0 || a > 100) {
+        result = "Invalid Input ❌";
+      } else if (a >= 80) {
+        result = "Grade: A+ 🏆";
+      } else if (a >= 70) {
+        result = "Grade: A";
+      } else if (a >= 60) {
+        result = "Grade: A-";
+      } else if (a >= 50) {
+        result = "Grade: B";
+      } else if (a >= 40) {
+        result = "Grade: C";
+      } else if (a >= 33) {
+        result = "Grade: D";
+      } else {
+        result = "Grade: F 💀";
+      }
+
+      document.getElementById("result").innerHTML = result;
+    }
+  </script>
+</body>
+</html>
