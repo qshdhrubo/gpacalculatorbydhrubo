@@ -19,7 +19,7 @@ body::before {
   content: '';
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.65);
+  background: rgba(0, 0, 0, 0.45); /* updated overlay */
   z-index: -1;
 }
 
@@ -46,6 +46,8 @@ input::-webkit-inner-spin-button {
   -webkit-appearance: none;
   margin: 0;
 }
+
+input#mark { color: white; }
 
 .star {
   cursor: pointer;
@@ -74,9 +76,26 @@ input::-webkit-inner-spin-button {
   z-index: 50;
 }
 #thankYouMsg.show { display: block; }
+
+footer { color: white; opacity: 0.8; }
+
+/* Developer photo protection */
+.developer-protect, .developer-protect * {
+  -webkit-user-select: none !important;
+  -moz-user-select: none !important;
+  -ms-user-select: none !important;
+  user-select: none !important;
+  touch-action: none !important;
+  -webkit-touch-callout: none !important;
+  pointer-events: none;
+}
+
+#screenshotWarning {
+  pointer-events: none;
+}
 </style>
 </head>
-<body class="min-h-screen flex flex-col justify-center items-center p-4">
+<body class="min-h-screen flex flex-col justify-center items-center p-4 select-none">
 
 <!-- Main Grade Calculator -->
 <div id="mainContainer"
@@ -87,7 +106,7 @@ input::-webkit-inner-spin-button {
   </p>
 
   <input type="number" id="mark" placeholder="Enter mark here"
-    class="w-full p-3 mb-6 text-center text-xl font-bold text-cyan-400 bg-gray-800 border border-gray-700 rounded-lg focus:ring-cyan-500 focus:border-cyan-500 transition-all duration-100 shadow-inner"
+    class="w-full p-3 mb-6 text-center text-xl font-bold bg-gray-800 border border-gray-700 rounded-lg focus:ring-cyan-500 focus:border-cyan-500 transition-all duration-100 shadow-inner"
     min="0" max="100" onkeydown="if(event.key === 'Enter') calculateGrade()" />
 
   <button onclick="calculateGrade()"
@@ -114,10 +133,20 @@ input::-webkit-inner-spin-button {
 <div id="developerOverlay"
   class="fixed inset-0 bg-black/80 backdrop-blur-sm hidden z-30 flex justify-center items-center">
   <div id="developerBox"
-    class="bg-gray-900 border border-cyan-500/30 rounded-2xl p-8 w-full max-w-xs text-center shadow-2xl shadow-cyan-500/20">
-    <img src="dhrubo.jpg" alt="Developer Photo"
-      onerror="this.onerror=null; this.src='https://placehold.co/120x120/00bfff/ffffff?text=DEV'"
-      class="w-32 h-32 rounded-full mx-auto mb-4 border-4 border-cyan-500 object-cover shadow-xl">
+    class="bg-gray-900 border border-cyan-500/30 rounded-2xl p-8 w-full max-w-xs text-center shadow-2xl shadow-cyan-500/20 relative">
+    
+    <!-- Protected Image Container -->
+    <div class="relative w-32 h-32 mx-auto mb-4 developer-protect">
+      <img src="dhrubo.jpg" alt="Developer Photo"
+           class="w-full h-full rounded-full object-cover shadow-xl">
+      <!-- Transparent overlay blocks interaction -->
+      <div class="absolute inset-0 rounded-full" style="background:transparent;"></div>
+      <!-- Mobile Screenshot Warning -->
+      <div id="screenshotWarning" 
+           class="absolute inset-0 flex items-center justify-center bg-black/70 text-white text-xs font-semibold rounded-full opacity-0 transition-opacity duration-200">
+        Screenshot And Saving Photo Disabled ⚠️
+      </div>
+    </div>
 
     <h2 class="text-2xl font-bold text-white mb-2">Qazi Sajidul Hasan Dhrubo</h2>
     <p class="text-gray-400 text-sm leading-snug">
@@ -189,7 +218,7 @@ input::-webkit-inner-spin-button {
 <div id="thankYouMsg"></div>
 
 <!-- Footer -->
-<footer class="mt-8 text-center text-gray-600 text-xs">
+<footer class="mt-8 text-center text-xs">
 © 2025 GPA Calculator BD | Made by Qazi Sajidul Hasan Dhrubo
 </footer>
 
@@ -224,13 +253,22 @@ const feedbackBox=document.getElementById('feedbackBox');
 function showFeedback(){feedbackOverlay.classList.remove('hidden');requestAnimationFrame(()=>feedbackBox.classList.add('active'));}
 function closeFeedback(){feedbackBox.classList.remove('active');setTimeout(()=>feedbackOverlay.classList.add('hidden'),250);}
 
-// Star rating
+// Star rating with deselect
 const stars=document.querySelectorAll('.star');
 const starInput=document.getElementById('starRating');
 stars.forEach(star=>{
   star.addEventListener('mouseover',()=>{stars.forEach(s=>s.classList.remove('hovered'));for(let i=0;i<star.dataset.value;i++) stars[i].classList.add('hovered');});
   star.addEventListener('mouseout',()=>stars.forEach(s=>s.classList.remove('hovered')));
-  star.addEventListener('click',()=>{starInput.value=star.dataset.value;stars.forEach(s=>s.classList.remove('selected'));for(let i=0;i<star.dataset.value;i++) stars[i].classList.add('selected');});
+  star.addEventListener('click',()=>{
+    if(starInput.value==star.dataset.value){
+      starInput.value=0;
+      stars.forEach(s=>s.classList.remove('selected'));
+    }else{
+      starInput.value=star.dataset.value;
+      stars.forEach(s=>s.classList.remove('selected'));
+      for(let i=0;i<star.dataset.value;i++) stars[i].classList.add('selected');
+    }
+  });
 });
 
 // Feedback Form Submission
@@ -238,6 +276,7 @@ const form=document.getElementById('feedbackForm');
 const thankYouMsg=document.getElementById('thankYouMsg');
 form.addEventListener('submit',async e=>{
   e.preventDefault();
+  if(starInput.value==0){alert("Please select a star rating before sending feedback!"); return;}
   const formData=new FormData(form);
   try{
     const res=await fetch(form.action,{method:'POST',body:formData,headers:{'Accept':'application/json'}});
@@ -252,6 +291,24 @@ form.addEventListener('submit',async e=>{
       setTimeout(()=>thankYouMsg.classList.remove('show'),5000);
     }else{alert('Oops! Could not send feedback.');}
   }catch(err){alert('Error sending feedback');}
+});
+
+// Prevent right-click, drag, and PrintScreen
+document.addEventListener('contextmenu', e=>e.preventDefault());
+document.addEventListener('keydown', e=>{
+  if(e.key === "PrintScreen"){
+    const devImg = document.querySelector("#developerBox img");
+    devImg.style.filter="brightness(0)";
+    setTimeout(()=>{devImg.style.filter="brightness(1)";}, 1000);
+  }
+});
+
+// Mobile long-press overlay warning
+const devProtect = document.querySelector(".developer-protect");
+const screenshotWarning = document.getElementById("screenshotWarning");
+devProtect.addEventListener("touchstart", e => {
+  screenshotWarning.style.opacity = "1";
+  setTimeout(() => { screenshotWarning.style.opacity = "0"; }, 1200);
 });
 </script>
 </body>
